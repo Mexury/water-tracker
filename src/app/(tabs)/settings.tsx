@@ -1,6 +1,7 @@
 import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { GlassIcon } from '../../components/GlassIcon';
 import { Card, Pill, SectionTitle } from '../../components/ui';
 import { reminderHours, requestReminderPermission } from '../../lib/reminders';
 import { useStore } from '../../lib/store';
@@ -29,7 +30,7 @@ function hourLabel(h: number): string {
 
 export default function SettingsScreen() {
   const { settings, updateSettings, resetAll } = useStore();
-  const { goalMl, unit, weightKg, reminders } = settings;
+  const { goalMl, unit, weightKg, reminders, presets } = settings;
   const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 
   const setReminders = (patch: Partial<typeof reminders>) => updateSettings({ reminders: { ...reminders, ...patch } });
@@ -41,6 +42,9 @@ export default function SettingsScreen() {
     }
     setReminders({ enabled });
   };
+
+  const setPreset = (index: number, ml: number) =>
+    updateSettings({ presets: presets.map((p, i) => (i === index ? { ...p, ml: clamp(ml, 50, 1500) } : p)) });
 
   const suggested = weightKg ? Math.round((weightKg * ML_PER_KG) / 50) * 50 : null;
 
@@ -68,6 +72,25 @@ export default function SettingsScreen() {
               <Text style={styles.suggestText}>Use suggested goal: {formatVolume(suggested, unit)}</Text>
             </Pressable>
           )}
+        </Card>
+
+        <Card style={styles.gap}>
+          <SectionTitle>Glass sizes</SectionTitle>
+          {presets.map((p, i) => (
+            <View key={p.label} style={[styles.presetRow, i > 0 && { marginTop: 12 }]}>
+              <View style={styles.presetName}>
+                <GlassIcon liquid={colors.water} scale={0.7 + 0.15 * i} height={40} />
+                <Text style={styles.presetLabel}>{p.label}</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Stepper
+                  value={formatVolume(p.ml, unit)}
+                  onMinus={() => setPreset(i, p.ml - 10)}
+                  onPlus={() => setPreset(i, p.ml + 10)}
+                />
+              </View>
+            </View>
+          ))}
         </Card>
 
         <Card style={styles.gap}>
@@ -150,6 +173,9 @@ const styles = StyleSheet.create({
   stepValue: { fontSize: 22, fontWeight: '800', color: colors.text },
   suggest: { marginTop: 14, padding: 12, borderRadius: 12, backgroundColor: '#E5F7EE' },
   suggestText: { color: colors.success, fontWeight: '700', textAlign: 'center' },
+  presetRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  presetName: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, width: 96 },
+  presetLabel: { fontWeight: '700', color: colors.text },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   hint: { color: colors.muted, fontSize: 12, marginTop: 12 },
