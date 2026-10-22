@@ -3,7 +3,8 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { GlassPhoto } from '../components/GlassPhoto';
+import { Glass3DView } from '../components/Glass3DView';
+import { GlassThumb } from '../components/GlassThumb';
 import { getDrink, type DrinkId } from '../lib/drinks';
 import { GLASSES } from '../lib/glasses';
 import { useStore } from '../lib/store';
@@ -36,7 +37,7 @@ export default function GlassesScreen() {
       </View>
 
       <View style={styles.hero}>
-        <GlassPhoto key={focused.id} glass={focused} size={150} liquid={liquid} />
+        <Glass3DView key={focused.id} id={focused.id} liquid={liquid} size={170} />
         <View style={styles.heroText}>
           <Text style={styles.heroName}>{focused.name}</Text>
           <Text style={styles.heroMl}>{formatVolume(focused.capacityMl, unit)}</Text>
@@ -60,7 +61,7 @@ export default function GlassesScreen() {
               style={[styles.card, isFocused && { borderColor: colors.primary }]}
             >
               {isMine && <Text style={styles.badge}>✓</Text>}
-              <GlassPhoto glass={g} size={84} liquid={liquid} />
+              <GlassThumb id={g.id} size={90} />
               <Text style={styles.cardName} numberOfLines={1}>
                 {g.name}
               </Text>
@@ -69,7 +70,7 @@ export default function GlassesScreen() {
           );
         })}
         <Text style={styles.footnote}>
-          Photos and capacities from ikea.com.
+          3D models built from IKEA's listed height and capacity. Drag the big glass to spin it.
         </Text>
       </ScrollView>
     </View>
