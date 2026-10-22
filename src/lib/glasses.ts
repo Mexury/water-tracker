@@ -14,6 +14,8 @@ export type GlassShape = {
 
 export type Glass = {
   id: string;
+  /** File name of IKEA's product photo, see photoUrl(). */
+  photo: string;
   name: string;
   capacityMl: number;
   note: string;
@@ -23,6 +25,7 @@ export type Glass = {
 export const GLASSES: Glass[] = [
   {
     id: 'pokal-35',
+    photo: 'pokal-glass-clear-glass__0713251_pe729361_s5.jpg',
     name: 'POKAL',
     capacityMl: 350,
     note: 'Tall faceted classic',
@@ -30,6 +33,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'pokal-27',
+    photo: 'pokal-glass-clear-glass__1468546_pe996183_s5.jpg',
     name: 'POKAL',
     capacityMl: 270,
     note: 'Smaller faceted classic',
@@ -37,6 +41,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'ikea365-30',
+    photo: 'ikea-365-glass-clear-glass__0928958_pe790097_s5.jpg',
     name: 'IKEA 365+',
     capacityMl: 300,
     note: 'Straight, sleek tumbler',
@@ -44,6 +49,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'ikea365-45',
+    photo: 'ikea-365-glass-clear-glass__0928963_pe790099_s5.jpg',
     name: 'IKEA 365+',
     capacityMl: 450,
     note: 'Large straight tumbler',
@@ -51,6 +57,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'godis-40',
+    photo: 'godis-glass-clear-glass__0712781_pe729051_s5.jpg',
     name: 'GODIS',
     capacityMl: 400,
     note: 'Tall, for drinks with ice',
@@ -58,6 +65,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'godis-23',
+    photo: 'godis-glass-clear-glass__0712791_pe729061_s5.jpg',
     name: 'GODIS',
     capacityMl: 230,
     note: 'Short and simple',
@@ -65,6 +73,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'vardagen-43',
+    photo: 'vardagen-glass-clear-glass__0533551_pe648679_s5.jpg',
     name: 'VARDAGEN',
     capacityMl: 430,
     note: 'Ribbed, sturdy',
@@ -72,6 +81,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'vardagen-31',
+    photo: 'vardagen-glass-light-turquoise__1199875_pe904733_s5.jpg',
     name: 'VARDAGEN',
     capacityMl: 310,
     note: 'Ribbed, light turquoise',
@@ -79,6 +89,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'storsint-37',
+    photo: 'storsint-glass-clear-glass__0640889_pe700133_s5.jpg',
     name: 'STORSINT',
     capacityMl: 370,
     note: 'Crystal-like, flared',
@@ -86,6 +97,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'ivrig-45',
+    photo: 'ivrig-glass-clear-glass__0713244_pe729354_s5.jpg',
     name: 'IVRIG',
     capacityMl: 450,
     note: 'Round bowl, no stem',
@@ -93,6 +105,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'olivtrast-29',
+    photo: 'olivtrast-glass-clear-glass__1394604_pe966634_s5.jpg',
     name: 'OLIVTRAST',
     capacityMl: 290,
     note: 'Round, wide mouth',
@@ -100,6 +113,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'frojda-30',
+    photo: 'froejda-glass-clear-glass__1335378_pe947027_s5.jpg',
     name: 'FRÖJDA',
     capacityMl: 300,
     note: 'Diamond facets',
@@ -107,6 +121,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'klipplax-25',
+    photo: 'klipplax-glass-clear-glass__1387443_pe964231_s5.jpg',
     name: 'KLIPPLAX',
     capacityMl: 250,
     note: 'Wavy texture',
@@ -114,6 +129,7 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'reko-17',
+    photo: 'reko-glass-clear-glass__0712792_pe729062_s5.jpg',
     name: 'REKO',
     capacityMl: 170,
     note: 'Small, stackable',
@@ -121,12 +137,18 @@ export const GLASSES: Glass[] = [
   },
   {
     id: 'pokal-espresso-10',
+    photo: 'pokal-espresso-glass-clear-glass__1335438_pe947073_s5.jpg',
     name: 'POKAL espresso',
     capacityMl: 100,
     note: 'Tiny ribbed glass',
     shape: { heightMm: 75, radiiMm: [24, 25, 26, 27, 28], edges: 8 },
   },
 ];
+
+/** IKEA's own product photo, loaded from ikea.com at runtime. */
+export function photoUrl(glass: Glass): string {
+  return `https://www.ikea.com/nz/en/images/products/${glass.photo}?f=s`;
+}
 
 export const DEFAULT_GLASS_IDS = ['pokal-35', 'ikea365-30', 'godis-40'];
 

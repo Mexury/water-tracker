@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Glass3D } from '../../components/Glass3D';
+import { GlassPhoto } from '../../components/GlassPhoto';
 import { Llama } from '../../components/Llama';
 import { Card, SectionTitle } from '../../components/ui';
 import { CUP_SIZES_ML, DRINKS, getDrink, type DrinkId } from '../../lib/drinks';
@@ -130,7 +130,7 @@ export default function TodayScreen() {
                 onPress={() => add(g.capacityMl)}
                 style={({ pressed }) => [styles.glass, pressed && styles.pressed]}
               >
-                <Glass3D shape={g.shape} liquid={selected.color} height={84} />
+                <GlassPhoto glass={g} size={76} liquid={selected.color} />
                 <Text style={styles.glassName} numberOfLines={1}>
                   {g.name}
                 </Text>
