@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import type { DrinkId } from './drinks';
+import { DEFAULT_GLASS_IDS } from './glasses';
 import { syncReminders } from './reminders';
 import type { Entry } from './stats';
 import type { Unit } from './units';
@@ -19,6 +20,8 @@ export type Settings = {
   unit: Unit;
   weightKg: number | null;
   reminders: Reminders;
+  /** IKEA glasses shown as one-tap presets on the Today screen. */
+  glassIds: string[];
 };
 
 type State = { settings: Settings; entries: Entry[] };
@@ -30,6 +33,7 @@ export const DEFAULT_SETTINGS: Settings = {
   unit: 'ml',
   weightKg: null,
   reminders: { enabled: false, startHour: 9, endHour: 21, everyHours: 2 },
+  glassIds: DEFAULT_GLASS_IDS,
 };
 
 type Store = State & {
