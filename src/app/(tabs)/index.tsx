@@ -1,14 +1,12 @@
 import * as Haptics from 'expo-haptics';
-import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { GlassPhoto } from '../../components/GlassPhoto';
+import { GlassIcon } from '../../components/GlassIcon';
 import { Llama } from '../../components/Llama';
 import { Card, SectionTitle } from '../../components/ui';
 import { CUP_SIZES_ML, DRINKS, getDrink, type DrinkId } from '../../lib/drinks';
-import { getGlass, type Glass } from '../../lib/glasses';
 import { currentStreak, dayKey, hydrationMl, totalsByDay } from '../../lib/stats';
 import { useStore } from '../../lib/store';
 import { colors, radius } from '../../lib/theme';
@@ -71,7 +69,6 @@ export default function TodayScreen() {
   };
 
   const selected = getDrink(drinkId);
-  const myGlasses = settings.glassIds.map(getGlass).filter((g): g is Glass => !!g);
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -122,29 +119,20 @@ export default function TodayScreen() {
             })}
           </ScrollView>
 
-          <SectionTitle>Your glasses</SectionTitle>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.glasses}>
-            {myGlasses.map((g) => (
+          <SectionTitle>Glasses</SectionTitle>
+          <View style={styles.presets}>
+            {settings.presets.map((p, i) => (
               <Pressable
-                key={g.id}
-                onPress={() => add(g.capacityMl)}
-                style={({ pressed }) => [styles.glass, pressed && styles.pressed]}
+                key={p.label}
+                onPress={() => add(p.ml)}
+                style={({ pressed }) => [styles.preset, pressed && styles.pressed]}
               >
-                <GlassPhoto glass={g} size={76} liquid={selected.color} />
-                <Text style={styles.glassName} numberOfLines={1}>
-                  {g.name}
-                </Text>
-                <Text style={styles.glassMl}>+{formatVolume(g.capacityMl, unit)}</Text>
+                <GlassIcon liquid={selected.color} scale={0.7 + 0.15 * i} height={60} />
+                <Text style={styles.presetLabel}>{p.label}</Text>
+                <Text style={styles.presetMl}>+{formatVolume(p.ml, unit)}</Text>
               </Pressable>
             ))}
-            <Pressable
-              onPress={() => router.push({ pathname: '/glasses', params: { drink: drinkId } })}
-              style={({ pressed }) => [styles.glass, styles.glassAdd, pressed && styles.pressed]}
-            >
-              <Text style={styles.glassAddPlus}>＋</Text>
-              <Text style={styles.glassName}>IKEA glasses</Text>
-            </Pressable>
-          </ScrollView>
+          </View>
 
           <SectionTitle>Quick add {selected.label.toLowerCase()}</SectionTitle>
           <View style={styles.sizes}>
@@ -225,18 +213,18 @@ const styles = StyleSheet.create({
   },
   drinkEmoji: { fontSize: 26 },
   drinkLabel: { marginTop: 4, fontSize: 12, fontWeight: '600', color: colors.muted },
-  glasses: { gap: 10, paddingBottom: 16 },
-  glass: {
-    width: 92,
+  presets: { flexDirection: 'row', gap: 10, marginBottom: 16 },
+  preset: {
+    flex: 1,
     alignItems: 'center',
-    paddingVertical: 8,
+    justifyContent: 'flex-end',
+    paddingTop: 10,
+    paddingBottom: 8,
     borderRadius: radius.md,
     backgroundColor: colors.bg,
   },
-  glassAdd: { justifyContent: 'center', borderWidth: 2, borderColor: colors.border, borderStyle: 'dashed' },
-  glassAddPlus: { fontSize: 28, color: colors.primary, fontWeight: '700' },
-  glassName: { marginTop: 4, fontSize: 12, fontWeight: '700', color: colors.text },
-  glassMl: { fontSize: 12, fontWeight: '700', color: colors.primary },
+  presetLabel: { marginTop: 6, fontSize: 13, fontWeight: '700', color: colors.text },
+  presetMl: { fontSize: 13, fontWeight: '700', color: colors.primary },
   sizes: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   size: { width: '31%', flexGrow: 1, paddingVertical: 14, borderRadius: radius.md, alignItems: 'center' },
   custom: { backgroundColor: colors.primarySoft },
