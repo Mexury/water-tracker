@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Llama Water",
+    "name": "Sip",
     "slug": "water-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -28,7 +28,8 @@
         "expo-notifications",
         {}
       ],
-      "expo-status-bar"
+      "expo-status-bar",
+      "expo-font"
     ],
     "scheme": "llamawater",
     "experiments": {

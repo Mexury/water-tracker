@@ -1,10 +1,12 @@
 import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { GlassIcon } from '../../components/GlassIcon';
+import { SkyBackground } from '../../components/SkyBackground';
 import { Card, Pill, SectionTitle } from '../../components/ui';
 import { reminderHours, requestReminderPermission } from '../../lib/reminders';
 import { useStore } from '../../lib/store';
-import { colors } from '../../lib/theme';
+import { colors, fonts } from '../../lib/theme';
 import { formatVolume } from '../../lib/units';
 
 const ML_PER_KG = 33;
@@ -29,7 +31,7 @@ function hourLabel(h: number): string {
 
 export default function SettingsScreen() {
   const { settings, updateSettings, resetAll } = useStore();
-  const { goalMl, unit, weightKg, reminders } = settings;
+  const { goalMl, unit, weightKg, reminders, presets } = settings;
   const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 
   const setReminders = (patch: Partial<typeof reminders>) => updateSettings({ reminders: { ...reminders, ...patch } });
@@ -42,10 +44,15 @@ export default function SettingsScreen() {
     setReminders({ enabled });
   };
 
+  const setPreset = (index: number, ml: number) =>
+    updateSettings({ presets: presets.map((p, i) => (i === index ? { ...p, ml: clamp(ml, 50, 1500) } : p)) });
+
   const suggested = weightKg ? Math.round((weightKg * ML_PER_KG) / 50) * 50 : null;
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
+    <View style={styles.safe}>
+      <SkyBackground />
+      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Settings</Text>
 
@@ -68,6 +75,25 @@ export default function SettingsScreen() {
               <Text style={styles.suggestText}>Use suggested goal: {formatVolume(suggested, unit)}</Text>
             </Pressable>
           )}
+        </Card>
+
+        <Card style={styles.gap}>
+          <SectionTitle>Glass sizes</SectionTitle>
+          {presets.map((p, i) => (
+            <View key={p.label} style={[styles.presetRow, i > 0 && { marginTop: 12 }]}>
+              <View style={styles.presetName}>
+                <GlassIcon liquid={colors.water} scale={0.7 + 0.15 * i} height={40} />
+                <Text style={styles.presetLabel}>{p.label}</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Stepper
+                  value={formatVolume(p.ml, unit)}
+                  onMinus={() => setPreset(i, p.ml - 10)}
+                  onPlus={() => setPreset(i, p.ml + 10)}
+                />
+              </View>
+            </View>
+          ))}
         </Card>
 
         <Card style={styles.gap}>
@@ -127,16 +153,17 @@ export default function SettingsScreen() {
           <Text style={styles.resetText}>Reset all data</Text>
         </Pressable>
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
   content: { padding: 20, paddingBottom: 40 },
-  title: { color: colors.text, fontSize: 32, fontWeight: '800', marginBottom: 16 },
+  title: { color: colors.text, fontSize: 32, fontFamily: fonts.black, marginBottom: 16 },
   gap: { marginTop: 16 },
-  label: { color: colors.muted, fontWeight: '600', marginTop: 16, marginBottom: 8 },
+  label: { color: colors.muted, fontFamily: fonts.bold, marginTop: 16, marginBottom: 8 },
   stepper: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   stepBtn: {
     width: 44,
@@ -146,13 +173,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  stepBtnText: { fontSize: 24, fontWeight: '700', color: colors.primary },
-  stepValue: { fontSize: 22, fontWeight: '800', color: colors.text },
+  stepBtnText: { fontSize: 24, fontFamily: fonts.heavy, color: colors.primary },
+  stepValue: { fontSize: 22, fontFamily: fonts.black, color: colors.text },
   suggest: { marginTop: 14, padding: 12, borderRadius: 12, backgroundColor: '#E5F7EE' },
-  suggestText: { color: colors.success, fontWeight: '700', textAlign: 'center' },
+  suggestText: { color: colors.success, fontFamily: fonts.heavy, textAlign: 'center' },
+  presetRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  presetName: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, width: 96 },
+  presetLabel: { fontFamily: fonts.heavy, color: colors.text },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   hint: { color: colors.muted, fontSize: 12, marginTop: 12 },
   reset: { marginTop: 24, padding: 16, alignItems: 'center' },
-  resetText: { color: colors.danger, fontWeight: '700' },
+  resetText: { color: colors.danger, fontFamily: fonts.heavy },
 });
