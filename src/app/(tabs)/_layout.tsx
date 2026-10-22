@@ -1,10 +1,10 @@
 import { Tabs } from 'expo-router';
 import { Text } from 'react-native';
 
-import { colors } from '../../lib/theme';
+import { colors, fonts } from '../../lib/theme';
 
 function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
-  return <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.45 }}>{emoji}</Text>;
+  return <Text style={{ fontSize: 20, lineHeight: 24, opacity: focused ? 1 : 0.45 }}>{emoji}</Text>;
 }
 
 export default function TabsLayout() {
@@ -15,12 +15,12 @@ export default function TabsLayout() {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
         tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.border },
-        tabBarLabelStyle: { fontWeight: '600' },
+        tabBarLabelStyle: { fontFamily: fonts.bold, fontSize: 11, lineHeight: 14, marginTop: -4 },
       }}
     >
       <Tabs.Screen
         name="index"
-        options={{ title: 'Today', tabBarIcon: ({ focused }) => <TabIcon emoji="🦙" focused={focused} /> }}
+        options={{ title: 'Today', tabBarIcon: ({ focused }) => <TabIcon emoji="💧" focused={focused} /> }}
       />
       <Tabs.Screen
         name="history"

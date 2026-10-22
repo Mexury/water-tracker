@@ -28,8 +28,6 @@ export const DRINKS: Drink[] = [
   { id: 'smoothie', label: 'Smoothie', emoji: '🍓', color: '#F28DB2', hydration: 0.8 },
 ];
 
-export const CUP_SIZES_ML = [100, 200, 250, 330, 500];
-
 export function getDrink(id: DrinkId): Drink {
   return DRINKS.find((d) => d.id === id) ?? DRINKS[0];
 }

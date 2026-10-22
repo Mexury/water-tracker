@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 
-import { colors, radius } from '../lib/theme';
+import { colors, fonts, radius } from '../lib/theme';
 
 export function Card({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
   return <View style={[styles.card, style]}>{children}</View>;
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 13,
-    fontWeight: '700',
+    fontFamily: fonts.heavy,
     color: colors.muted,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
@@ -62,5 +62,5 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.card,
   },
-  pillText: { fontWeight: '600', color: colors.text },
+  pillText: { fontFamily: fonts.bold, color: colors.text },
 });

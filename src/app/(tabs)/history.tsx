@@ -3,10 +3,11 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Line, Rect, Text as SvgText } from 'react-native-svg';
 
+import { SkyBackground } from '../../components/SkyBackground';
 import { Card, SectionTitle } from '../../components/ui';
 import { bestStreak, currentStreak, dayKey, lastNDays, totalsByDay } from '../../lib/stats';
 import { useStore } from '../../lib/store';
-import { colors } from '../../lib/theme';
+import { colors, fonts } from '../../lib/theme';
 import { formatVolume } from '../../lib/units';
 
 const CHART_W = 320;
@@ -47,7 +48,7 @@ function WeekChart({ days, totals, goalMl }: { days: Date[]; totals: Map<string,
           x={i * slot + slot / 2}
           y={CHART_H - 8}
           fontSize={12}
-          fontWeight="600"
+          fontFamily={fonts.bold}
           fill={colors.muted}
           textAnchor="middle"
         >
@@ -79,7 +80,9 @@ export default function HistoryScreen() {
   const goalDays = past.filter((d) => (totals.get(dayKey(d)) ?? 0) >= goalMl).length;
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
+    <View style={styles.safe}>
+      <SkyBackground />
+      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>History</Text>
 
@@ -121,21 +124,22 @@ export default function HistoryScreen() {
           })}
         </Card>
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
   content: { padding: 20, paddingBottom: 40 },
-  title: { color: colors.text, fontSize: 32, fontWeight: '800', marginBottom: 16 },
+  title: { color: colors.text, fontSize: 32, fontFamily: fonts.black, marginBottom: 16 },
   stats: { flexDirection: 'row', gap: 12, marginBottom: 12 },
   stat: { flex: 1, alignItems: 'center', paddingVertical: 18 },
-  statValue: { fontSize: 22, fontWeight: '800', color: colors.text },
-  statLabel: { color: colors.muted, fontSize: 12, fontWeight: '600', marginTop: 4 },
+  statValue: { fontSize: 22, fontFamily: fonts.black, color: colors.text },
+  statLabel: { color: colors.muted, fontSize: 12, fontFamily: fonts.bold, marginTop: 4 },
   dayRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 7 },
-  dayLabel: { width: 96, color: colors.text, fontSize: 13, fontWeight: '600' },
+  dayLabel: { width: 96, color: colors.text, fontSize: 13, fontFamily: fonts.bold },
   track: { flex: 1, height: 10, borderRadius: 5, backgroundColor: colors.border, overflow: 'hidden' },
   fill: { height: '100%', borderRadius: 5 },
-  dayValue: { width: 84, textAlign: 'right', color: colors.muted, fontSize: 12, fontWeight: '600' },
+  dayValue: { width: 84, textAlign: 'right', color: colors.muted, fontSize: 12, fontFamily: fonts.bold },
 });

@@ -3,10 +3,10 @@ import * as Notifications from 'expo-notifications';
 import type { Reminders } from './store';
 
 const MESSAGES = [
-  'Llama is thirsty! Time for a sip 💧',
-  'A glass of water keeps the llama happy 🦙',
+  'Time for a sip 💧',
+  'Your water orb is looking a bit empty 🫧',
   'Hydration check! How about some water?',
-  'Your llama misses you. Drink up! 💙',
+  'Hydration break! Drink up 💙',
 ];
 
 Notifications.setNotificationHandler({
@@ -40,7 +40,7 @@ export async function syncReminders(reminders: Reminders): Promise<void> {
   await Promise.all(
     reminderHours(reminders).map((hour, i) =>
       Notifications.scheduleNotificationAsync({
-        content: { title: 'Llama Water', body: MESSAGES[i % MESSAGES.length] },
+        content: { title: 'Sip', body: MESSAGES[i % MESSAGES.length] },
         trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour, minute: 0 },
       }),
     ),

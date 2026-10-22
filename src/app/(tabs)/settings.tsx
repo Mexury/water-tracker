@@ -2,10 +2,11 @@ import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 're
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { GlassIcon } from '../../components/GlassIcon';
+import { SkyBackground } from '../../components/SkyBackground';
 import { Card, Pill, SectionTitle } from '../../components/ui';
 import { reminderHours, requestReminderPermission } from '../../lib/reminders';
 import { useStore } from '../../lib/store';
-import { colors } from '../../lib/theme';
+import { colors, fonts } from '../../lib/theme';
 import { formatVolume } from '../../lib/units';
 
 const ML_PER_KG = 33;
@@ -49,7 +50,9 @@ export default function SettingsScreen() {
   const suggested = weightKg ? Math.round((weightKg * ML_PER_KG) / 50) * 50 : null;
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
+    <View style={styles.safe}>
+      <SkyBackground />
+      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Settings</Text>
 
@@ -150,16 +153,17 @@ export default function SettingsScreen() {
           <Text style={styles.resetText}>Reset all data</Text>
         </Pressable>
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
   content: { padding: 20, paddingBottom: 40 },
-  title: { color: colors.text, fontSize: 32, fontWeight: '800', marginBottom: 16 },
+  title: { color: colors.text, fontSize: 32, fontFamily: fonts.black, marginBottom: 16 },
   gap: { marginTop: 16 },
-  label: { color: colors.muted, fontWeight: '600', marginTop: 16, marginBottom: 8 },
+  label: { color: colors.muted, fontFamily: fonts.bold, marginTop: 16, marginBottom: 8 },
   stepper: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   stepBtn: {
     width: 44,
@@ -169,16 +173,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  stepBtnText: { fontSize: 24, fontWeight: '700', color: colors.primary },
-  stepValue: { fontSize: 22, fontWeight: '800', color: colors.text },
+  stepBtnText: { fontSize: 24, fontFamily: fonts.heavy, color: colors.primary },
+  stepValue: { fontSize: 22, fontFamily: fonts.black, color: colors.text },
   suggest: { marginTop: 14, padding: 12, borderRadius: 12, backgroundColor: '#E5F7EE' },
-  suggestText: { color: colors.success, fontWeight: '700', textAlign: 'center' },
+  suggestText: { color: colors.success, fontFamily: fonts.heavy, textAlign: 'center' },
   presetRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   presetName: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, width: 96 },
-  presetLabel: { fontWeight: '700', color: colors.text },
+  presetLabel: { fontFamily: fonts.heavy, color: colors.text },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   hint: { color: colors.muted, fontSize: 12, marginTop: 12 },
   reset: { marginTop: 24, padding: 16, alignItems: 'center' },
-  resetText: { color: colors.danger, fontWeight: '700' },
+  resetText: { color: colors.danger, fontFamily: fonts.heavy },
 });
